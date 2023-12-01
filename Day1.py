@@ -1039,7 +1039,6 @@ for string in stringList:
                 dig1 = string[element]
                 dig1found = True
             dig2 = string[element]
-    print(dig1 +  ", " + dig2)
     sum += int(dig1)*10
     sum += int(dig2)
 print(sum)
@@ -2066,17 +2065,33 @@ What is the sum of all of the calibration values?
 
 stringList2 = input2.split()
 
+spelled_out_numbers = {
+    'one': '1', 'two': '2', 'three': '3', 'four': '4', 'five': '5',
+    'six': '6', 'seven': '7', 'eight': '8', 'nine': '9'
+}
 
 
 
+for string in stringList2:
+    curString = string
+    num1 = 0
+    num2 = 0
+    num1found = False
+    index = 0
+    while (len(curString) > 0):
+        if (curString[0].isdigit()):
+            if (num1found):
+                num1 = curString[0]
+                num1found = True
+            dig2 = 
+        for num in spelled_out_numbers:
+            if (curString.startswith(num)):
+'''
+2 pointers
+remove char from start/finish if  not digit or written dig
+enter dig 1/2 from start/finish
 
-
-
-
-
-
-
-
+'''
 
 '''
 sum = 0
