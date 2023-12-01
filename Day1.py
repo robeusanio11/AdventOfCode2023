@@ -2047,4 +2047,51 @@ gsntbddbnone4cjqjmspzcsxmvvthreefive
 56four4one2
 cqmzqbxzfvonevmmmlxsnjr5zfg"""
 
+'''
+Your calculation isn't quite right. It looks like some of the digits are actually spelled out with letters: one, two, three, four, five, six, seven, eight, and nine also count as valid "digits".
+
+Equipped with this new information, you now need to find the real first and last digit on each line. For example:
+
+two1nine
+eightwothree
+abcone2threexyz
+xtwone3four
+4nineeightseven2
+zoneight234
+7pqrstsixteen
+In this example, the calibration values are 29, 83, 13, 24, 42, 14, and 76. Adding these together produces 281.
+
+What is the sum of all of the calibration values?
+'''
+
 stringList2 = input2.split()
+
+
+
+
+
+
+
+
+
+
+
+
+
+'''
+sum = 0
+for string in stringList:
+    dig1 = 0
+    dig2 = 0
+    dig1found = False
+    for element in range(0, len(string)):
+        if(string[element].isdigit()):
+            if (not dig1found):
+                dig1 = string[element]
+                dig1found = True
+            dig2 = string[element]
+    print(dig1 +  ", " + dig2)
+    sum += int(dig1)*10
+    sum += int(dig2)
+print(sum)
+'''
