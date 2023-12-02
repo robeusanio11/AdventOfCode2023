@@ -1,3 +1,4 @@
+from LinkedList import *
 '''
 --- Day 2: Cube Conundrum ---
 You're launched high into the atmosphere! The apex of your trajectory just barely reaches the surface of a large island floating in the sky. You gently land in a fluffy pile of leaves. It's quite cold, but you don't see much snow. An Elf runs over to greet you.
@@ -25,6 +26,27 @@ In the example above, games 1, 2, and 5 would have been possible if the bag had 
 
 Determine which games would have been possible if the bag had been loaded with only 12 red cubes, 13 green cubes, and 14 blue cubes. What is the sum of the IDs of those games?
 '''
+games = {}
+limits = {
+    "red": 12,
+    "green": 13,
+    "blue": 14
+}
+sum = 0
 gamesFile = open("AdventOfCode2023\Day2\games.txt", "r")
-games = gamesFile.readlines()
-print(games)
+lines = gamesFile.readlines()
+for line in lines:
+    possible = True
+    gameNum = line.split(":")[0].split()[-1]
+    gamesInfo = line.split(":")[1].split(";")
+    for gameInfo in gamesInfo:
+        diceSet = gameInfo.split(",")
+        for dice in diceSet:
+            numDice = dice.split()[0]
+            colorDice = dice.split()[1]
+            if (int(numDice) > limits[colorDice]):
+                possible = False
+    if (possible):
+        sum += int(gameNum)
+            
+print(sum)
