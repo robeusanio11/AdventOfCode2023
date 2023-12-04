@@ -30,33 +30,55 @@ Of course, the actual engine schematic is much larger. What is the sum of all of
 '''
 def getNumAndIndex(i, j, lines):
     curChar = lines[i][j]
+    curNum = ""
     while (curChar.isdigit()):
         curNum += curChar
-        if (j+1 < len(lines[i])):
+        if (isValidIndex(i, j+1, lines)):
             j += 1
+            curChar = lines[i][j]
         else:
-            break
-    return [int(curNum), j]
+            return [int(curNum), j]
+
+    return [int(curNum), j-1]
 
 def checkAdjSymbol(i, startJ, endJ, lines):
     #todo
+    j = startJ
+    while j <= endJ:
+        for adj in adjIndices:
+            for symbol in symbols:
+                if isValidIndex(i+adj[0], j+adj[1], lines):
+                    if lines[i+adj[0]][j+adj[1]] == symbol:
+                        return True
+        j += 1
+    return False
+        
 
-symbols = ['=', '+', '-', '@', '#', '$', '%', '&', '^', '*', '/', '']
+
+def isValidIndex(i, j, lines):
+    if (i >= 0 and i < len(lines)):
+        if (j >= 0 and j < len(lines[0])): 
+            return True
+    return False
+adjIndices = [[-1, -1], [-1, 0], [-1, 1], [0, 1], [0, -1], [1, -1], [1, 0], [1, 1]]
+symbols = ['=', '+', '-', '@', '#', '$', '%', '&', '*', '/']
 schematic = open("AdventOfCode2023\Day3\engine.txt", "r")
 lines = schematic.readlines()
 sum = 0
 i = 0
 while (i < len(lines)):
-
     j = 0
     while (j < len(lines[i])):
         curChar = lines[i][j]
         if curChar.isdigit():
             startIndex = j
             curNum = getNumAndIndex(i, j, lines)[0]
-            j, endIndex = getNumAndIndex[1]
+            endIndex = getNumAndIndex(i, j, lines)[1]
+            j = getNumAndIndex(i, j, lines)[1]
             if (checkAdjSymbol(i, startIndex, endIndex, lines)):
+                print(curNum)
                 sum += curNum
+        j += 1
+    i += 1
 
-
-
+print(sum)
