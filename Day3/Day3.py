@@ -28,6 +28,8 @@ In this schematic, two numbers are not part numbers because they are not adjacen
 
 Of course, the actual engine schematic is much larger. What is the sum of all of the part numbers in the engine schematic?
 '''
+from datetime import datetime
+
 def getNumAndIndex(i, j, lines):
     curChar = lines[i][j]
     curNum = ""
@@ -42,7 +44,6 @@ def getNumAndIndex(i, j, lines):
     return [int(curNum), j-1]
 
 def checkAdjSymbol(i, startJ, endJ, lines):
-    #todo
     j = startJ
     while j <= endJ:
         for adj in adjIndices:
@@ -52,14 +53,14 @@ def checkAdjSymbol(i, startJ, endJ, lines):
                         return True
         j += 1
     return False
-        
-
 
 def isValidIndex(i, j, lines):
     if (i >= 0 and i < len(lines)):
         if (j >= 0 and j < len(lines[0])): 
             return True
     return False
+
+p1start = datetime.now()
 adjIndices = [[-1, -1], [-1, 0], [-1, 1], [0, 1], [0, -1], [1, -1], [1, 0], [1, 1]]
 symbols = ['=', '+', '-', '@', '#', '$', '%', '&', '*', '/']
 schematic = open("AdventOfCode2023\Day3\engine.txt", "r")
@@ -76,9 +77,9 @@ while (i < len(lines)):
             endIndex = getNumAndIndex(i, j, lines)[1]
             j = getNumAndIndex(i, j, lines)[1]
             if (checkAdjSymbol(i, startIndex, endIndex, lines)):
-                print(curNum)
                 sum += curNum
         j += 1
     i += 1
-
 print(sum)
+p1end = datetime.now()
+print("Part 1: " + str(p1end-p1start))
