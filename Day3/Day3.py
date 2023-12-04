@@ -117,13 +117,46 @@ import re
 
 def findAdjNums(i, j, lines):
     #todo
-    
+    numSet = set()
+    for adj in adjIndices:
+        if isValidIndex(i+adj[0], j+adj[1], lines):
+            adjChar = lines[i+adj[0]][j+adj[1]]
+            if (adjChar.isdigit()):
+                numSet.add(getNum(i+adj[0], j+adj[1]))
+    return numSet
+
+def getNum(i, j):
+    num = lines[i][j]
+    curHead = j-1
+    curTail = j+1
+    while (isValidIndex(i, curHead, lines) or isValidIndex(i, curTail, lines)):
+        if not (lines[i][curHead].isdigit() or lines[i][curTail].isdigit()):
+            break
+        if lines[i][curHead].isdigit():
+            num = lines[i][curHead] + num
+            curHead -= 1
+        if lines[i][curTail].isdigit():
+            num = num + lines[i][curTail]
+            curTail += 1
+    return int(num)
+
+p2start = datetime.now()
 sum = 0
 i = 0
 while i < len(lines):
     j = 0
     while j < len(lines[i]):
         curChar = lines[i][j]
-            if curChar == '*':
-                adjNums = findAdjNums(i, j, lines)
-    
+        if curChar == '*':
+            adjNums = findAdjNums(i, j, lines)
+            if len(adjNums) == 2:
+                twoNums = []
+                for num in adjNums:
+                    twoNums.append(num)
+                sum += twoNums[0]*twoNums[1]
+        j +=1
+    i += 1
+
+print(sum)
+p2end = datetime.now()
+print("Part 2: " + str(p2end-p2start))
