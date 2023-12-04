@@ -28,9 +28,35 @@ In this schematic, two numbers are not part numbers because they are not adjacen
 
 Of course, the actual engine schematic is much larger. What is the sum of all of the part numbers in the engine schematic?
 '''
+def getNumAndIndex(i, j, lines):
+    curChar = lines[i][j]
+    while (curChar.isdigit()):
+        curNum += curChar
+        if (j+1 < len(lines[i])):
+            j += 1
+        else:
+            break
+    return [int(curNum), j]
 
+def checkAdjSymbol(i, startJ, endJ, lines):
+    #todo
+
+symbols = ['=', '+', '-', '@', '#', '$', '%', '&', '^', '*', '/', '']
 schematic = open("AdventOfCode2023\Day3\engine.txt", "r")
 lines = schematic.readlines()
+sum = 0
+i = 0
+while (i < len(lines)):
 
-for line in lines:
-    print(line)
+    j = 0
+    while (j < len(lines[i])):
+        curChar = lines[i][j]
+        if curChar.isdigit():
+            startIndex = j
+            curNum = getNumAndIndex(i, j, lines)[0]
+            j, endIndex = getNumAndIndex[1]
+            if (checkAdjSymbol(i, startIndex, endIndex, lines)):
+                sum += curNum
+
+
+
