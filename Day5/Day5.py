@@ -140,12 +140,15 @@ Consider all of the initial seed numbers listed in the ranges on the first line 
 '''
 f = open("AdventOfCode2023\Day5\seeds.txt", "r")
 seedsList = f.readline().split(":")[1].split()
+f.readline()
 lines = f.readlines()
 locations = []
 start = True
 seeds = []
 starts = []
 ranges = []
+maps = []
+
 for seed in seedsList:
     if start:
         starts.append(int(seed))
@@ -153,30 +156,67 @@ for seed in seedsList:
     else:
         ranges.append(int(seed))
         start = not start
-for i in range(len(starts)):
-    for num in range(starts[i], starts[i]+ranges[i]):
-        seeds.append(num)
 
-for seed in seeds:    
-    curNum = int(seed)
-    for line in lines:
-        # find new maps
-        if line[0].isalpha():
-            newMap = True
-            wasShifted = False
+for line in lines:
+    if line[0].isalpha():
+        curMap = {
+            'dst': [],
+            'src': [],
+            'rng': [],
+        }
+    else:
+        if not line == '\n':
+            dst, src, rng = line.split()
+            curMap['dst'].append(int(dst))
+            curMap['src'].append(int(src))
+            curMap['rng'].append(int(rng))
         else:
-            if not line == '\n':
-                # run if not yet mapped
-                if newMap and not wasShifted:
-                        # get source, destination, range
-                        dst, src, rng = line.split()
-                        dst = int(dst)
-                        src = int(src)
-                        rng = int(rng)
-                        # if curNum is in line range - shift num and iterate until new map
-                        if (curNum >= src and curNum <= src+rng):
-                             wasShifted = True
-                             newMap = False
-                             curNum = (curNum-src)+dst
-    locations.append(curNum)
-print(min(locations))
+            maps.append(curMap)
+location = 0
+found = False
+while not found:
+    curNum = location
+    for map in range(len(maps), 0):
+        for i in range(0, len(maps['dst'])):
+            if curNum >= maps['dst'][i] and curNum <= maps['dst'][i]+maps['rng'][i]:
+                curNum = (maps['src'][i] - maps['dst'][i]) + curNum
+    for index, start in enumerate(starts):
+        if curNum >= start and curNum <= start+ranges[index]:
+            location = curNum
+            found = True
+print(location)
+
+# for seed in seedsList:
+#     if start:
+#         starts.append(int(seed))
+#         start = not start
+#     else:
+#         ranges.append(int(seed))
+#         start = not start
+# for i in range(len(starts)):
+#     for num in range(starts[i], starts[i]+ranges[i]):
+#         seeds.append(num)
+
+# for seed in seeds:    
+#     curNum = int(seed)
+#     for line in lines:
+#         # find new maps
+#         if line[0].isalpha():
+#             newMap = True
+#             wasShifted = False
+#         else:
+#             if not line == '\n':
+#                 # run if not yet mapped
+#                 if newMap and not wasShifted:
+#                         # get source, destination, range
+#                         dst, src, rng = line.split()
+#                         dst = int(dst)
+#                         src = int(src)
+#                         rng = int(rng)
+#                         # if curNum is in line range - shift num and iterate until new map
+#                         if (curNum >= src and curNum <= src+rng):
+#                              wasShifted = True
+#                              newMap = False
+#                              curNum = (curNum-src)+dst
+#     locations.append(curNum)
+# print(min(locations))
