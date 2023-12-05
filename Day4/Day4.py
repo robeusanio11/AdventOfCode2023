@@ -62,6 +62,8 @@ for key in myCards:
                     cardTotal *= 2
     sum += cardTotal
 print(sum)
+
+
 '''
 --- Part Two ---
 Just as you're about to report your findings to the Elf, one of you realizes that the rules have actually been printed on the back of every card this whole time.
@@ -113,50 +115,3 @@ for num in numCards:
         total += num
 
 print(total)
-'''
-
-cardPile = open("AdventOfCode2023\Day4\cards.txt", "r")
-lines = cardPile.readlines()
-cards = []
-myCards = {}
-gameNum = 0
-for line in lines:
-    gameNum += 1
-    cards.append(line.split(":")[1])
-    for card in cards:
-        curWinningNum = card.split("|")[0]
-        curMyNum = card.split("|")[1]
-        curCard = {
-            'winningNums': curWinningNum.split(),
-            'myNums': curMyNum.split(),
-            'count': 0,
-            'matches': 0
-        }
-        myCards.update({gameNum: curCard})
-
-part2Cards = {}
-sum = 0
-myCards[1]['count'] = 1
-for key in myCards:
-    matches = 0
-    for myNum in myCards[key]['myNums']:
-        for winningNum in myCards[key]['winningNums']:
-            if myNum == winningNum:
-                matches += 1
-    myCards[key]['matches'] = matches
-    for i in range(key+1, key+matches):
-        if (i < len(myCards)):
-            myCards[i]['count'] = myCards[i]['count'] + myCards[key]['count']
-for key in myCards:
-    if (myCards[key]['count'] == 0):
-        break
-    else:
-        print(str(key) + ": count-" + str(myCards[key]['count']) + " | matches-" + str(myCards[key]['matches']))
-        print("")
-print(sum)
-'''
-
-
-'''
-7185540
-'''
