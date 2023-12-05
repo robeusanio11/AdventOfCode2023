@@ -93,6 +93,30 @@ Process all of the original and copied scratchcards until no more scratchcards a
 '''
 cardPile = open("AdventOfCode2023\Day4\cards.txt", "r")
 lines = cardPile.readlines()
+numCards = []
+for i in range(len(lines)):
+    numCards.append(1)
+for index, line in enumerate(lines):
+    curLine = line.split(":")[1].strip()
+    curWinnings = curLine.split("|")[0].split()
+    curMyNums = curLine.split("|")[1].split()
+    matches = len(set(curWinnings).intersection(set(curMyNums)))
+    i = 0
+    for i in range(matches):
+        numCards[index+i+1] += numCards[index]
+
+total = 0
+for num in numCards:
+    if num == 0:
+        break
+    else:
+        total += num
+
+print(total)
+'''
+
+cardPile = open("AdventOfCode2023\Day4\cards.txt", "r")
+lines = cardPile.readlines()
 cards = []
 myCards = {}
 gameNum = 0
@@ -105,30 +129,34 @@ for line in lines:
         curCard = {
             'winningNums': curWinningNum.split(),
             'myNums': curMyNum.split(),
-            'count': 1
+            'count': 0,
+            'matches': 0
         }
         myCards.update({gameNum: curCard})
 
 part2Cards = {}
 sum = 0
+myCards[1]['count'] = 1
 for key in myCards:
-    curIteration = 0
-    while (curIteration < myCards[key]['count']):
-        matches = 0
-        for myNum in myCards[key]['myNums']:
-            for winningNum in myCards[key]['winningNums']:
-                if myNum == winningNum:
-                    matches += 1
-        for i in range(key+1, key+matches):
-            if (i < len(myCards)):
-                curCard = {
-                    'winningNums': myCards[i]['winningNums'],
-                    'myNums': myCards[i]['myNums'],
-                    'count': myCards[i]['count'] + 1
-                }
-                myCards.update({i: curCard})
-
-        curIteration += 1
+    matches = 0
+    for myNum in myCards[key]['myNums']:
+        for winningNum in myCards[key]['winningNums']:
+            if myNum == winningNum:
+                matches += 1
+    myCards[key]['matches'] = matches
+    for i in range(key+1, key+matches):
+        if (i < len(myCards)):
+            myCards[i]['count'] = myCards[i]['count'] + myCards[key]['count']
 for key in myCards:
-    sum += myCards[key]['count']
+    if (myCards[key]['count'] == 0):
+        break
+    else:
+        print(str(key) + ": count-" + str(myCards[key]['count']) + " | matches-" + str(myCards[key]['matches']))
+        print("")
 print(sum)
+'''
+
+
+'''
+7185540
+'''
