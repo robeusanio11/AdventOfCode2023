@@ -96,4 +96,5 @@ def findP2():
         if (curDistance > distance):
             p2 += 1
     return p2
+
 print(findP2())
