@@ -175,16 +175,23 @@ for line in lines:
 location = 0
 found = False
 while not found:
+    print(location)
     curNum = location
-    for map in range(len(maps), 0):
-        for i in range(0, len(maps['dst'])):
-            if curNum >= maps['dst'][i] and curNum <= maps['dst'][i]+maps['rng'][i]:
-                curNum = (maps['src'][i] - maps['dst'][i]) + curNum
+    for map in range(len(maps)-1, -1, -1):
+        for i in range(0, len(maps[map]['dst'])):
+            if curNum >= maps[map]['dst'][i] and curNum <= maps[map]['dst'][i]+maps[map]['rng'][i]:
+                # print(curNum)
+                curNum = (curNum-maps[map]['dst'][i]) + maps[map]['src'][i]
+                break
+                # curNum = (maps[map]['src'][i] - maps[map]['dst'][i]) + curNum
     for index, start in enumerate(starts):
         if curNum >= start and curNum <= start+ranges[index]:
-            location = curNum
+            # location = curNum
+            print(curNum)
             found = True
-print(location)
+    location += 1
+    
+# print(curNum)
 
 # for seed in seedsList:
 #     if start:
