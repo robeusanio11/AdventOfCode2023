@@ -41,3 +41,59 @@ To see how much margin of error you have, determine the number of ways you can b
 
 Determine the number of ways you could beat the record in each race. What do you get if you multiply these numbers together?
 '''
+def findP1():
+    f = open(r"AdventOfCode2023\Day6\races.txt", "r")
+    times = f.readline().split(':')[1].strip().split()
+    distances = f.readline().split(':')[1].strip().split()
+    waysToWin = []
+    for index, time in enumerate(times):
+        time = int(time)
+        for i in range(time):
+            curDistance = (time-i)*i
+            if (curDistance > int(distances[index])):
+                if (index < len(waysToWin)):
+                    waysToWin[index] += 1
+                else:
+                    waysToWin.append(1);
+    p1 = 1
+    for ways in waysToWin:
+        p1 *= ways
+    return p1
+
+print(findP1())
+
+'''
+--- Part Two ---
+As the race is about to start, you realize the piece of paper with race times and record distances you got earlier actually just has very bad kerning. There's really only one race - ignore the spaces between the numbers on each line.
+
+So, the example from before:
+
+Time:      7  15   30
+Distance:  9  40  200
+...now instead means this:
+
+Time:      71530
+Distance:  940200
+Now, you have to figure out how many ways there are to win this single race. In this example, the race lasts for 71530 milliseconds and the record distance you need to beat is 940200 millimeters. You could hold the button anywhere from 14 to 71516 milliseconds and beat the record, a total of 71503 ways!
+
+How many ways can you beat the record in this one much longer race?
+'''
+def findP2():
+    f = open(r"AdventOfCode2023\Day6\races.txt", "r")
+    times = f.readline().split(':')[1].strip().split()
+    distances = f.readline().split(':')[1].strip().split()
+    time = ""
+    distance = ""
+    p2 = 0
+    for t in times:
+        time += t
+    for d in distances:
+        distance += d
+    time = int(time)
+    distance = int(distance)
+    for i in range(time):
+        curDistance = (time-i)*i
+        if (curDistance > distance):
+            p2 += 1
+    return p2
+print(findP2())
