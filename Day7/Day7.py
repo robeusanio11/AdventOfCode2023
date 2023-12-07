@@ -62,9 +62,78 @@ cardVals = {
     '7': 7,
     '8': 8,
     '9': 9,
-    'J': 10,
-    'Q': 11,
-    'K': 12,
-    'A': 13
+    'T': 10,
+    'J': 11,
+    'Q': 12,
+    'K': 13,
+    'A': 14
 }
+def getHandValue(hand):
+    numOccurences = {}
+    for chr in hand:
+        if chr in numOccurences:
+            numOccurences[chr] += 1
+        else:
+            numOccurences[chr] = 1
+    if len(numOccurences) == 1:
+        print(hand)
+        return 7
+    elif len(numOccurences) == 2:
+        for occurence in numOccurences:
+            if numOccurences[occurence] == 4:
+                return 6
+        return 5
+    elif len(numOccurences) == 3:
+        for occurence in numOccurences:
+            if numOccurences[occurence] == 3:
+                return 4 
+        return 3
+    elif len(numOccurences) == 4:
+        return 2
+    else:
+        return 1
+    
+def hand1Greater(hand1, hand2):
+    for i, chr in enumerate(hand1):
+        if cardVals[chr] > cardVals[hand2[i]]:
+            return True
+        elif cardVals[chr] < cardVals[hand2[i]]:
+            return False
+    return False
 
+def findP1():
+    f = open(r"AdventOfCode2023\Day7\games.txt", "r")
+    lines = f.readlines()
+    rankedHands = []
+    p1 = 0
+    for line in lines:
+        # cur hand/wager
+        hand, wager = line.split()
+        curHand = [hand, wager]
+        # add hand/wager if rankedHands empty
+        if len(rankedHands) == 0:
+            rankedHands.append(curHand)
+        else:
+            placed = False
+            # check where cur hand fits in ranked hands
+            for index, rankedHand in enumerate(rankedHands):
+                # if curHand is less than hand in sorted ranked list place it there
+                if getHandValue(hand) < getHandValue(rankedHand[0]):
+                    rankedHands.insert(index, curHand)
+                    placed = True
+                    break
+                # if num pairs is same find first highest card
+                elif getHandValue(hand) == getHandValue(rankedHand[0]):
+                    if not hand1Greater(hand, rankedHand[0]):
+                        rankedHands.insert(index, curHand)
+                        placed = True
+                        break
+            # add to end if highest hand
+            if not placed:
+                rankedHands.append(curHand)
+    
+    for i, rankedHand in enumerate(rankedHands):
+        p1 += (int(rankedHand[1])*(i+1))
+    return p1
+
+print(findP1())
