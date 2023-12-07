@@ -76,7 +76,6 @@ def getHandValue(hand):
         else:
             numOccurences[chr] = 1
     if len(numOccurences) == 1:
-        print(hand)
         return 7
     elif len(numOccurences) == 2:
         for occurence in numOccurences:
@@ -160,10 +159,98 @@ With the new joker rule, the total winnings in this example are 5905.
 
 Using the new joker rule, find the rank of every hand in your set. What are the new total winnings?
 '''
+cardVals2 = {
+    'J': 1,
+    '2': 2,
+    '3': 3,
+    '4': 4,
+    '5': 5,
+    '6': 6,
+    '7': 7,
+    '8': 8,
+    '9': 9,
+    'T': 10,
+    'Q': 12,
+    'K': 13,
+    'A': 14
+}
+
+def getHandValueJ(hand):
+    numOccurences = {}
+    for chr in hand:
+        if chr in numOccurences:
+            numOccurences[chr] += 1
+        else:
+            numOccurences[chr] = 1
+    # todo convert J to highest val unless only J
+    if 'J' in numOccurences:
+        curMax = 0
+        for key in numOccurences:
+            if key == 'J':
+                continue
+            if numOccurences[key] > curMax:
+                maxOccurence = key
+                curMax = numOccurences[key]
+        if not (numOccurences['J'] == 5):
+            numOccurences[maxOccurence] += numOccurences['J']
+            del numOccurences['J'] 
+
+    if len(numOccurences) == 1:
+        return 7
+    elif len(numOccurences) == 2:
+        for occurence in numOccurences:
+            if numOccurences[occurence] == 4:
+                return 6
+        return 5
+    elif len(numOccurences) == 3:
+        for occurence in numOccurences:
+            if numOccurences[occurence] == 3:
+                return 4 
+        return 3
+    elif len(numOccurences) == 4:
+        return 2
+    else:
+        return 1
+    
+def hand1GreaterJ(hand1, hand2):
+    for i, chr in enumerate(hand1):
+        if cardVals2[chr] > cardVals2[hand2[i]]:
+            return True
+        elif cardVals2[chr] < cardVals2[hand2[i]]:
+            return False
+    return False
+        
 
 def findP2():
     f = open(r"AdventOfCode2023\Day7\games.txt", "r")
     lines = f.readlines()
     rankedHands = []
     p2 = 0
-    
+    for line in lines:
+        hand, wager = line.split()
+        curHand = [hand, wager]
+        if len(rankedHands) == 0:
+            rankedHands.append(curHand)
+        else:
+            placed = False
+            # check where cur hand fits in ranked hands
+            for index, rankedHand in enumerate(rankedHands):
+                # if curHand is less than hand in sorted ranked list place it there
+                if getHandValueJ(hand) < getHandValueJ(rankedHand[0]):
+                    rankedHands.insert(index, curHand)
+                    placed = True
+                    break
+                # if num pairs is same find first highest card
+                elif getHandValueJ(hand) == getHandValueJ(rankedHand[0]):
+                    if not hand1GreaterJ(hand, rankedHand[0]):
+                        rankedHands.insert(index, curHand)
+                        placed = True
+                        break
+            # add to end if highest hand
+            if not placed:
+                rankedHands.append(curHand)
+    for i, rankedHand in enumerate(rankedHands):
+        p2 += (int(rankedHand[1])*(i+1))
+    return p2
+
+print(findP2())
