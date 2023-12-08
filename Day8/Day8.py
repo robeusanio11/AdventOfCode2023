@@ -30,5 +30,41 @@ BBB = (AAA, ZZZ)
 ZZZ = (ZZZ, ZZZ)
 Starting at AAA, follow the left/right instructions. How many steps are required to reach ZZZ?
 '''
-f = open(r"AdventOfCode2023\Day8\instructions.txt", "r")
-instructions = f.readline()
+def findP1():
+    f = open(r"AdventOfCode2023\Day8\instructions.txt", "r")
+    instructions = f.readline()
+    f.readline()
+
+    paths = {}
+    lines = f.readlines()
+    for line in lines:
+        code = line.split("=")[0].strip()
+        directions = line.split("=")[1].strip().split(",")
+        paths[code] = [directions[0].strip(" ("), directions[1].strip(" )")]
+        # print(code, paths[code])
+
+    curCode = 'AAA'
+    p1 = 0
+    while curCode != 'ZZZ':
+        i = p1 % (len(instructions) - 1) # repeat the whole sequence of instructions as necessary
+        if instructions[i] ==  'R':
+            curCode = paths[curCode][1]
+            p1 += 1
+        else:
+            curCode = paths[curCode][0]
+            p1 += 1
+        # for instruction in instructions:
+        #     p1 += 1
+        #     print(curCode, p1)
+        #     if instruction == 'R':
+        #         curCode = paths[curCode][1]
+        #     else:
+        #         curCode = paths[curCode][0]
+        #     if curCode == 'ZZZ':
+        #         break
+    return p1
+
+print(findP1())
+'''
+21409
+'''
