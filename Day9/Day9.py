@@ -64,3 +64,28 @@ If you find the next value for each history in this example and add them togethe
 
 Analyze your OASIS report and extrapolate the next value for each history. What is the sum of these extrapolated values?
 '''
+def findP1():
+    f = open(r"AdventOfCode2023\Day9\sequences.txt", "r")
+    sequences = f.readlines()
+    p1 = 0
+    for sequence in sequences:
+        sequence = sequence.split()
+        seqs = [[]]
+        for num in sequence:
+            seqs[0].append(int(num))
+        curSeq = seqs[0]
+        nextSeq = []
+        while (len(set(curSeq)) > 1 or curSeq.count(0) == 0):
+            for i, num in enumerate(curSeq):
+                if i < len(curSeq)-1:
+                    nextSeq.append(curSeq[i+1] - curSeq[i])
+            seqs.append(nextSeq)
+            curSeq = nextSeq
+            nextSeq = []
+        seqs[-1].append(0)
+        for i in range(len(seqs)-2, -1, -1):
+            seqs[i].append(seqs[i][-1] + seqs[i+1][-1])
+        p1 += seqs[0][-1]
+    return p1
+
+print(findP1())
