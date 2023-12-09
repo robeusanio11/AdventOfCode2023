@@ -89,3 +89,48 @@ def findP1():
     return p1
 
 print(findP1())
+
+'''
+--- Part Two ---
+Of course, it would be nice to have even more history included in your report. Surely it's safe to just extrapolate backwards as well, right?
+
+For each history, repeat the process of finding differences until the sequence of differences is entirely zero. Then, rather than adding a zero to the end and filling in the next values of each previous sequence, you should instead add a zero to the beginning of your sequence of zeroes, then fill in new first values for each previous sequence.
+
+In particular, here is what the third example history looks like when extrapolating back in time:
+
+5  10  13  16  21  30  45
+  5   3   3   5   9  15
+   -2   0   2   4   6
+      2   2   2   2
+        0   0   0
+Adding the new values on the left side of each sequence from bottom to top eventually reveals the new left-most history value: 5.
+
+Doing this for the remaining example data above results in previous values of -3 for the first history and 0 for the second history. Adding all three new values together produces 2.
+
+Analyze your OASIS report again, this time extrapolating the previous value for each history. What is the sum of these extrapolated values?
+'''
+def findP2():
+    f = open(r"AdventOfCode2023\Day9\sequences.txt", "r")
+    sequences = f.readlines()
+    p2 = 0
+    for sequence in sequences:
+        sequence = sequence.split()
+        seqs = [[]]
+        for num in sequence:
+            seqs[0].append(int(num))
+        curSeq = seqs[0]
+        nextSeq = []
+        while (len(set(curSeq)) > 1 or curSeq.count(0) == 0):
+            for i, num in enumerate(curSeq):
+                if i < len(curSeq)-1:
+                    nextSeq.append(curSeq[i+1] - curSeq[i])
+            seqs.append(nextSeq)
+            curSeq = nextSeq
+            nextSeq = []
+        seqs[-1].append(0)
+        for i in range(len(seqs)-2, -1, -1):
+            seqs[i].insert(0, seqs[i][0] - seqs[i+1][0])
+        p2 += seqs[0][0]
+    return p2
+
+print(findP2())
