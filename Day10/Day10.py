@@ -93,3 +93,93 @@ Here are the distances for each tile on that loop:
 23...
 Find the single giant loop starting at S. How many steps along the loop does it take to get from the starting position to the point farthest from the starting position?
 '''
+def getStartIndex(maze):
+    for i, row in enumerate(maze):
+        if (row.find('S') != -1):
+            return [i, row.find('S')]
+def getNextIndices(curRow, curCol, maze, pipes):
+    curChar = maze[curRow][curCol]
+    pipes.append([curRow, curCol])
+    if curChar == '-':
+        for pipe in pipes:
+            if curRow == pipe[0] and curCol-1 == pipe[1]:
+                pipes.append([curRow, curCol+1])
+                return [curRow, curCol+1]
+            elif curRow == pipe[0] and curCol+1 == pipe[1]:
+                pipes.append([curRow, curCol])
+def findP1():
+    f = open(r"AdventOfCode2023\Day10\maze.txt", "r")
+    maze = f.readlines()
+    startRow, startCol = getStartIndex(maze)
+    loopIndices = [[startRow, startCol]]
+    prevRow = startRow
+    prevCol = startCol
+    curRow = startRow
+    curCol = startCol+1
+    curChar = maze[curRow][curCol]
+    loopIndices.append([curRow, curCol])
+    while curRow != startRow or curCol != startCol:
+        curChar = maze[curRow][curCol]
+        if curChar == '-':
+            if prevCol < curCol:
+                prevRow = curRow
+                prevCol = curCol
+                curCol += 1
+            else:
+                prevCol = curCol
+                prevRow = curRow
+                curCol -= 1
+            loopIndices.append([curRow, curCol])
+        elif curChar == '|':
+            if prevRow < curRow:
+                prevRow = curRow
+                prevCol = curCol
+                curRow += 1
+            else:
+                prevRow = curRow
+                prevCol = curCol
+                curRow -= 1
+            loopIndices.append([curRow, curCol])
+        elif curChar == '7':
+            if prevCol < curCol:
+                prevRow = curRow
+                prevCol = curCol
+                curRow += 1
+            else:
+                prevCol = curCol
+                prevRow = curRow
+                curCol -= 1
+            loopIndices.append([curRow, curCol])
+        elif curChar == 'J':
+            if prevRow < curRow:
+                prevCol = curCol
+                prevRow = curRow
+                curCol -= 1
+            else:
+                prevRow = curRow
+                prevCol = curCol
+                curRow -= 1
+            loopIndices.append([curRow, curCol])
+        elif curChar == 'L':
+            if prevCol > curCol:
+                prevRow = curRow
+                prevCol = curCol
+                curRow -= 1
+            else:
+                prevRow = curRow
+                prevCol = curCol
+                curCol += 1
+            loopIndices.append([curRow, curCol])
+        elif curChar == 'F':
+            if prevRow > curRow:
+                prevRow = curRow
+                prevCol = curCol
+                curCol += 1
+            else:
+                prevRow = curRow
+                prevCol = curCol
+                curRow += 1
+            loopIndices.append([curRow, curCol])
+    print((len(loopIndices)-1) / 2)
+    
+findP1()
