@@ -91,3 +91,25 @@ Expand the universe, then find the length of the shortest path between every pai
 
 To begin, get your puzzle input.
 '''
+def findP1():
+    f = open(r"AdventOfCode2023\Day10\maze.txt", "r")
+    lines = f.readlines()
+    space = []
+    for line in lines:
+        if '#' in line:
+            space.append(line)
+        else:
+            space.append(line)
+            space.append(line)
+
+    doubleRows = 0
+    for i in range(len(lines[0]) - 1):
+        isEmpty = True
+        for line in space:
+            if line[i+doubleRows] == '#':
+                isEmpty = False
+        if isEmpty:
+            for line in space:
+                line.insert(i+doubleRows, '.')
+    print(space)
+findP1()
